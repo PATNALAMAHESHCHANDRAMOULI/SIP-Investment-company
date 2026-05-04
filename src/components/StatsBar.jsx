@@ -1,10 +1,4 @@
 export default function StatsBar() {
-  const stats = [
-    { bold: '₹500 Cr+', light: 'managed' },
-    { bold: '2.4L+', light: 'investors' },
-    { bold: 'Since 2019', light: '' },
-  ]
-
   return (
     <section className="anim-stats px-6 lg:px-10">
       <div className="max-w-6xl mx-auto">
@@ -12,25 +6,46 @@ export default function StatsBar() {
           style={{
             borderTop: '1px solid var(--border)',
             borderBottom: '1px solid var(--border)',
-            padding: '28px 0',
+            padding: '28px 24px',
           }}
         >
-          <div className="grid grid-cols-3 gap-4 md:gap-0 md:flex md:items-center md:justify-between">
-            {stats.map((s, i) => (
-              <div key={i} className="flex flex-col md:flex-row md:items-baseline md:gap-2 text-center md:text-left">
-                <span
-                  className="tabular-nums"
-                  style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)' }}
-                >
-                  {s.bold}
-                </span>
-                {s.light && (
-                  <span style={{ fontSize: 14, color: 'var(--text-tertiary)' }}>
-                    {s.light}
-                  </span>
-                )}
-              </div>
-            ))}
+          <div className="stats-bar-group">
+            {/* Stat 1 */}
+            <div className="stats-bar-item">
+              <span
+                className="tabular-nums stats-bar-bold"
+                style={{ fontWeight: 700, color: 'var(--text-primary)' }}
+              >
+                100+
+              </span>
+              <span
+                className="stats-bar-label"
+                style={{ color: 'var(--text-tertiary)' }}
+              >
+                investors
+              </span>
+            </div>
+
+            {/* Divider */}
+            <div
+              style={{
+                width: 1,
+                height: 20,
+                background: '#E5E7EB',
+                alignSelf: 'center',
+                flexShrink: 0,
+              }}
+            />
+
+            {/* Stat 2 */}
+            <div className="stats-bar-item">
+              <span
+                className="tabular-nums stats-bar-bold"
+                style={{ fontWeight: 700, color: 'var(--text-primary)' }}
+              >
+                Since 2025
+              </span>
+            </div>
           </div>
         </div>
       </div>

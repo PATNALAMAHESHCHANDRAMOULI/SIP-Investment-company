@@ -23,6 +23,8 @@ export default function Hero() {
           }}
         >
           See exactly how your SIP grows.
+          <br />
+          Future Money Investment Plan.
         </p>
       </div>
     </section>
