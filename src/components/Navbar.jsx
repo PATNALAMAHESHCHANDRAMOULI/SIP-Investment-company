@@ -23,7 +23,7 @@ export default function Navbar() {
           className="font-semibold"
           style={{ fontSize: 15, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}
         >
-          SPI Investment
+          SIP Investment Company
         </span>
       </div>
 

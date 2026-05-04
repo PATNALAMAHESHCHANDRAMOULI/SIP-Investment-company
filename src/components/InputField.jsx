@@ -7,20 +7,18 @@ export default function InputField({
   onChange,
   prefix = '',
   suffix = '',
-  chips = [],
-  chipFormatter,
   min = 0,
   max = Infinity,
   error,
 }) {
   const [focused, setFocused] = useState(false)
   const inputRef = useRef(null)
-  const hasValue = value !== '' && value !== 0 && value !== undefined
+  const hasValue = value !== '' && value !== undefined
 
   const displayValue = useCallback(() => {
     if (focused) {
       // show raw digits while editing
-      return value ? String(value) : ''
+      return value !== '' ? String(value) : ''
     }
     if (!hasValue) return ''
     return formatInputValue(String(value))
@@ -28,7 +26,7 @@ export default function InputField({
 
   const handleChange = (e) => {
     const raw = e.target.value.replace(/[^0-9.]/g, '')
-    if (raw === '') { onChange(0); return }
+    if (raw === '') { onChange(''); return }
     const num = parseFloat(raw)
     if (!isNaN(num) && num <= max) onChange(num)
     else if (!isNaN(num) && num > max) onChange(max)
@@ -36,10 +34,10 @@ export default function InputField({
 
   const handleBlur = () => {
     setFocused(false)
-    if (value < min) onChange(min)
+    if (value !== '' && value < min) onChange(min)
   }
 
-  const isError = error || (hasValue && value < min)
+  const isError = error || (hasValue && value !== '' && value < min)
 
   return (
     <div className="mb-6 last:mb-0">
@@ -146,39 +144,6 @@ export default function InputField({
         <p style={{ fontSize: 12, color: 'var(--error)', marginTop: 4, paddingLeft: 4 }}>
           Please enter a valid value
         </p>
-      )}
-
-      {/* Chip row */}
-      {chips.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-3">
-          {chips.map((chip) => {
-            const isActive = value === chip
-            return (
-              <button
-                key={chip}
-                onClick={() => onChange(chip)}
-                style={{
-                  padding: '6px 14px',
-                  fontSize: 13,
-                  fontWeight: 500,
-                  fontFamily: 'var(--font-sans)',
-                  borderRadius: 8,
-                  border: `1px solid ${isActive ? 'var(--accent)' : 'var(--border)'}`,
-                  background: isActive ? 'var(--accent-light)' : 'var(--surface)',
-                  color: isActive ? 'var(--accent-dark)' : 'var(--text-secondary)',
-                  cursor: 'pointer',
-                  transition: 'all 150ms',
-                  transform: isActive ? 'scale(1)' : 'scale(1)',
-                  minHeight: 36,
-                }}
-                onMouseDown={(e) => { e.currentTarget.style.transform = 'scale(0.96)' }}
-                onMouseUp={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
-              >
-                {chipFormatter ? chipFormatter(chip) : chip}
-              </button>
-            )
-          })}
-        </div>
       )}
     </div>
   )

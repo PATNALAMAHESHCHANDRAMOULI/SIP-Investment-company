@@ -3,14 +3,18 @@ import InputField from './InputField'
 import ResultsPanel from './ResultsPanel'
 import { useSIPCalculator, useIntersectionObserver, smartFormat } from '../hooks'
 
-const inr = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 })
-
 export default function Calculator() {
-  const [monthly, setMonthly] = useState(10000)
-  const [rate, setRate] = useState(12)
-  const [years, setYears] = useState(10)
+  const [monthly, setMonthly] = useState('')
+  const [rate, setRate] = useState('')
+  const [years, setYears] = useState('')
+  const [months, setMonths] = useState('')
 
-  const { invested, returns, total } = useSIPCalculator(monthly, rate, years)
+  const totalMonths = ((Number(years) || 0) * 12) + (Number(months) || 0)
+  const { invested, returns, total } = useSIPCalculator(
+    Number(monthly) || 0,
+    Number(rate) || 0,
+    totalMonths
+  )
 
   // Sticky bar visibility
   const calcRef = useRef(null)
@@ -49,8 +53,6 @@ export default function Calculator() {
                   prefix="₹"
                   min={500}
                   max={10000000}
-                  chips={[1000, 5000, 10000, 25000]}
-                  chipFormatter={(v) => '₹' + inr.format(v)}
                 />
                 <InputField
                   label="Expected Annual Return"
@@ -59,18 +61,12 @@ export default function Calculator() {
                   suffix="%"
                   min={1}
                   max={30}
-                  chips={[8, 10, 12, 15]}
-                  chipFormatter={(v) => v + '%'}
                 />
-                <InputField
-                  label="Time Period (Years)"
-                  value={years}
-                  onChange={setYears}
-                  suffix="Yrs"
-                  min={1}
-                  max={40}
-                  chips={[5, 10, 15, 20]}
-                  chipFormatter={(v) => v + 'Y'}
+                <TimePeriodInputs
+                  years={years}
+                  months={months}
+                  onYearsChange={setYears}
+                  onMonthsChange={setMonths}
                 />
               </div>
 
@@ -88,8 +84,6 @@ export default function Calculator() {
                   prefix="₹"
                   min={500}
                   max={10000000}
-                  chips={[1000, 5000, 10000, 25000]}
-                  chipFormatter={(v) => '₹' + inr.format(v)}
                 />
                 <InputField
                   label="Expected Annual Return"
@@ -98,18 +92,12 @@ export default function Calculator() {
                   suffix="%"
                   min={1}
                   max={30}
-                  chips={[8, 10, 12, 15]}
-                  chipFormatter={(v) => v + '%'}
                 />
-                <InputField
-                  label="Time Period (Years)"
-                  value={years}
-                  onChange={setYears}
-                  suffix="Yrs"
-                  min={1}
-                  max={40}
-                  chips={[5, 10, 15, 20]}
-                  chipFormatter={(v) => v + 'Y'}
+                <TimePeriodInputs
+                  years={years}
+                  months={months}
+                  onYearsChange={setYears}
+                  onMonthsChange={setMonths}
                 />
               </div>
 
@@ -153,6 +141,121 @@ export default function Calculator() {
         </div>
       </div>
     </>
+  )
+}
+
+/* ── Time Period Inputs (Years + Months) ── */
+function TimePeriodInputs({ years, months, onYearsChange, onMonthsChange }) {
+  return (
+    <div className="mb-6 last:mb-0">
+      <label
+        style={{
+          display: 'block',
+          fontSize: 11,
+          fontWeight: 500,
+          color: 'var(--text-tertiary)',
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+          marginBottom: 8,
+        }}
+      >
+        Time Period
+      </label>
+      <div className="flex gap-3">
+        <TimePeriodField
+          value={years}
+          onChange={onYearsChange}
+          suffix="Years"
+          max={40}
+          placeholder="0"
+        />
+        <TimePeriodField
+          value={months}
+          onChange={onMonthsChange}
+          suffix="Months"
+          max={11}
+          placeholder="0"
+        />
+      </div>
+    </div>
+  )
+}
+
+/* ── Single time period input field ── */
+function TimePeriodField({ value, onChange, suffix, max, placeholder }) {
+  const [focused, setFocused] = useState(false)
+  const inputRef = useRef(null)
+
+  const handleChange = (e) => {
+    const raw = e.target.value.replace(/[^0-9]/g, '')
+    if (raw === '') { onChange(''); return }
+    const num = parseInt(raw, 10)
+    if (!isNaN(num) && num <= max) onChange(num)
+    else if (!isNaN(num) && num > max) onChange(max)
+  }
+
+  const handleBlur = () => {
+    setFocused(false)
+  }
+
+  return (
+    <div
+      className="relative cursor-text"
+      onClick={() => inputRef.current?.focus()}
+      style={{
+        flex: 1,
+        background: focused ? 'var(--surface)' : 'var(--input-bg)',
+        borderRadius: 12,
+        border: `2px solid ${focused ? 'var(--accent)' : 'transparent'}`,
+        transition: 'border-color 200ms, background 200ms, box-shadow 200ms',
+        boxShadow: focused ? '0 0 0 3px rgba(5,150,105,0.1)' : 'none',
+      }}
+    >
+      <input
+        ref={inputRef}
+        type="text"
+        inputMode="numeric"
+        value={value}
+        onChange={handleChange}
+        onFocus={() => setFocused(true)}
+        onBlur={handleBlur}
+        placeholder={placeholder}
+        style={{
+          width: '100%',
+          height: 52,
+          paddingTop: 4,
+          paddingBottom: 4,
+          paddingLeft: 16,
+          paddingRight: suffix ? 64 : 16,
+          fontSize: 18,
+          fontWeight: 600,
+          fontFamily: 'var(--font-sans)',
+          color: 'var(--text-primary)',
+          background: 'transparent',
+          border: 'none',
+          outline: 'none',
+          fontVariantNumeric: 'tabular-nums',
+        }}
+      />
+      {suffix && (
+        <span
+          style={{
+            position: 'absolute',
+            right: 16,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            fontSize: 14,
+            fontWeight: 600,
+            color: focused ? 'var(--accent)' : 'var(--text-tertiary)',
+            transition: 'color 200ms',
+            lineHeight: 1,
+            pointerEvents: 'none',
+          }}
+        >
+          {suffix}
+        </span>
+      )}
+    </div>
   )
 }
 

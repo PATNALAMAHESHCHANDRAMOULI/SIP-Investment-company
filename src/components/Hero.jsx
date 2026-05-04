@@ -11,7 +11,7 @@ export default function Hero() {
             color: 'var(--text-primary)',
           }}
         >
-          Serious wealth.
+          SIP Investment Company
         </h1>
         <p
           className="anim-sub"

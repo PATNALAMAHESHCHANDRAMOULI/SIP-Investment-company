@@ -14,14 +14,14 @@ export default function Footer() {
             <path d="M9 19V13M14 19V9M19 19V15" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" />
           </svg>
           <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-secondary)' }}>
-            SPI Investment
+            SIP Investment Company
           </span>
         </div>
         <span style={{ fontSize: 13, color: 'var(--text-tertiary)', lineHeight: 1.5 }}>
           Mutual fund investments are subject to market risks. Read all scheme-related documents carefully.
         </span>
         <span style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>
-          © {new Date().getFullYear()} SPI Investment
+          © {new Date().getFullYear()} SIP Investment Company
         </span>
       </div>
     </footer>

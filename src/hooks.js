@@ -1,17 +1,17 @@
 import { useCallback, useState, useRef, useEffect } from 'react'
 
 /* ── SIP Calculator ── */
-export function useSIPCalculator(monthly, rate, years) {
+export function useSIPCalculator(monthly, rate, totalMonths) {
   return useCallback(() => {
     const P = monthly || 0
     const r = (rate || 0) / 100 / 12
-    const n = (years || 0) * 12
+    const n = totalMonths || 0
     if (P <= 0 || r <= 0 || n <= 0) return { invested: 0, returns: 0, total: 0 }
     const invested = P * n
     const fv = P * ((Math.pow(1 + r, n) - 1) / r) * (1 + r)
     const returns = fv - invested
     return { invested, returns, total: fv }
-  }, [monthly, rate, years])()
+  }, [monthly, rate, totalMonths])()
 }
 
 /* ── Animated Number ── */
