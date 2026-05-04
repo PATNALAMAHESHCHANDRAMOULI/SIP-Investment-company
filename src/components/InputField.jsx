@@ -46,11 +46,27 @@ export default function InputField({
         className="relative cursor-text"
         onClick={() => inputRef.current?.focus()}
         style={{
-          background: focused ? 'var(--surface)' : 'var(--input-bg)',
-          borderRadius: 12,
-          border: `2px solid ${isError ? 'var(--error)' : focused ? 'var(--accent)' : 'transparent'}`,
-          transition: 'border-color 200ms, background 200ms, box-shadow 200ms',
-          boxShadow: focused ? '0 0 0 3px rgba(5,150,105,0.1)' : 'none',
+          background: focused ? 'var(--surface)' : '#FFFFFF',
+          borderRadius: 10,
+          border: `2px solid ${isError ? 'var(--error)' : focused ? '#047857' : '#059669'}`,
+          transition: 'border-color 150ms ease, box-shadow 150ms ease',
+          boxShadow: isError
+            ? 'none'
+            : focused
+              ? '0 0 0 5px rgba(5, 150, 105, 0.18)'
+              : '0 0 0 4px rgba(5, 150, 105, 0.10)',
+        }}
+        onMouseEnter={(e) => {
+          if (!focused && !isError) {
+            e.currentTarget.style.borderColor = '#047857';
+            e.currentTarget.style.boxShadow = '0 0 0 4px rgba(5, 150, 105, 0.14)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!focused && !isError) {
+            e.currentTarget.style.borderColor = '#059669';
+            e.currentTarget.style.boxShadow = '0 0 0 4px rgba(5, 150, 105, 0.10)';
+          }
         }}
       >
         {/* Floating label */}

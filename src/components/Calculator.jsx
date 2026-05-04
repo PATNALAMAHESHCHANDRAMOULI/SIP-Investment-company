@@ -47,7 +47,7 @@ export default function Calculator() {
               {/* Inputs */}
               <div className="anim-inputs">
                 <InputField
-                  label="Monthly Investment"
+                  label="How much will you be saving each month?"
                   value={monthly}
                   onChange={setMonthly}
                   prefix="₹"
@@ -78,7 +78,7 @@ export default function Calculator() {
             <div className="lg:hidden">
               <div className="anim-inputs mb-8">
                 <InputField
-                  label="Monthly Investment"
+                  label="How much will you be saving each month?"
                   value={monthly}
                   onChange={setMonthly}
                   prefix="₹"
@@ -204,11 +204,25 @@ function TimePeriodField({ value, onChange, suffix, max, placeholder }) {
       onClick={() => inputRef.current?.focus()}
       style={{
         flex: 1,
-        background: focused ? 'var(--surface)' : 'var(--input-bg)',
-        borderRadius: 12,
-        border: `2px solid ${focused ? 'var(--accent)' : 'transparent'}`,
-        transition: 'border-color 200ms, background 200ms, box-shadow 200ms',
-        boxShadow: focused ? '0 0 0 3px rgba(5,150,105,0.1)' : 'none',
+        background: focused ? 'var(--surface)' : '#FFFFFF',
+        borderRadius: 10,
+        border: `2px solid ${focused ? '#047857' : '#059669'}`,
+        transition: 'border-color 150ms ease, box-shadow 150ms ease',
+        boxShadow: focused
+          ? '0 0 0 5px rgba(5, 150, 105, 0.18)'
+          : '0 0 0 4px rgba(5, 150, 105, 0.10)',
+      }}
+      onMouseEnter={(e) => {
+        if (!focused) {
+          e.currentTarget.style.borderColor = '#047857';
+          e.currentTarget.style.boxShadow = '0 0 0 4px rgba(5, 150, 105, 0.14)';
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!focused) {
+          e.currentTarget.style.borderColor = '#059669';
+          e.currentTarget.style.boxShadow = '0 0 0 4px rgba(5, 150, 105, 0.10)';
+        }
       }}
     >
       <input
