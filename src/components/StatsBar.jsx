@@ -9,7 +9,7 @@ export default function StatsBar() {
             padding: '28px 24px',
           }}
         >
-          <div className="stats-bar-group">
+          <div className="stats-bar-group" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: '40px', flexWrap: 'nowrap' }}>
             {/* Stat 1 */}
             <div className="stats-bar-item">
               <span
